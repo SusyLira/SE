@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        codeql database create \
+                        ${CODEQL_HOME}/codeql database create \
                         --language=java \
                         --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
                         --source-root /var/lib/jenkins/workspace/ \
