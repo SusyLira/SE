@@ -7,7 +7,7 @@ pipeline {
         CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/"  
     }
 
-    stages {
+   stages {
         stage('Build CodeQL Database') {
             steps {
                 script {
@@ -15,7 +15,7 @@ pipeline {
                         codeql database create \
                         --language=java \
                         --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
-                        --source-root ./var/lib/jenkins/workspace/ \
+                        --source-root /var/lib/jenkins/workspace/ \
                         ${CODEQL_DATABASE_PATH}
                     """
                 }
