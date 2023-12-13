@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    codeql 'CodeQL'
+  }
+
   stages {
     stage('Checkout') {
       steps {
