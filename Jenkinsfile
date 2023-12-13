@@ -17,7 +17,7 @@ pipeline {
     stage('Initialize CodeQL Database') {
       steps {
         script {
-          sh 'codeql database create --language=java . --name=my-database'
+          sh 'codeql database create --language=java .'
         }
       }
     }
