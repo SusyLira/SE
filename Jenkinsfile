@@ -25,7 +25,7 @@ pipeline {
     stage('Run CodeQL Analysis') {
       steps {
         script {
-         codeql query run --database=my-database /var/lib/jenkins/workspace/codeql/query.ql
+         sh 'codeql query run --database=my-database /var/lib/jenkins/workspace/codeql/query.ql'
         }
       }
     }
