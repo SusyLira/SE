@@ -1,0 +1,35 @@
+name: CodeQL
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        language: [java]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Build
+      run: |
+        # Your build commands here
+
+    - name: Analyze
+      run: |
+        codeql database create --language=java --source-root . --output=codeql-database
+        codeql query run --database=codeql-database query.ql
