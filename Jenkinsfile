@@ -1,34 +1,33 @@
 pipeline {
-  agent any
+    agent any
 
-  tools {
-    codeql 'CodeQL'
-  }
-
-  stages {
-    stage('Checkout') {
-      steps {
-        script {
-          checkout([$class: 'GitSCM', branches: [[name: 'SusyLira-patch-1']], userRemoteConfigs: [[url: 'https://github.com/SusyLira/SE.git']]])
-        }
-      }
+    environment {
+        CODEQL_HOME = tool 'CodeQL'
+        CODEQL_JAVA_LIB_PATH = "${CODEQL_HOME}/java/libs"
+        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/"  
     }
 
-    stage('Initialize CodeQL Database') {
-      steps {
-        script {
-          sh 'codeql database create --language=java --overwrite /var/lib/jenkins/workspace/codeql/empty'
+    stages {
+        stage('Build CodeQL Database') {
+            steps {
+                script {
+                    sh """
+                        codeql database create \
+                        --language=java \
+                        --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
+                        --source-root ./var/lib/jenkins/workspace/ \
+                        ${CODEQL_DATABASE_PATH}
+                    """
+                }
+            }
         }
-      }
-    }
 
-    stage('Run CodeQL Analysis') {
-      steps {
-        script {
-         sh 'codeql query run --database=/var/lib/jenkins/workspace/codeql/empty /var/lib/jenkins/workspace/codeql/query.ql'
+        stage('Run CodeQL Analysis') {
+            steps {
+                script {
+                    sh "codeql query run --database=${CODEQL_DATABASE_PATH} /var/lib/jenkins/workspace/codeql/query.ql"
+                }
+            }
         }
-      }
     }
-  }
 }
-    
