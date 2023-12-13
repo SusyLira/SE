@@ -17,7 +17,7 @@ pipeline {
     stage('Initialize CodeQL Database') {
       steps {
         script {
-          codeql database create --language=java --overwrite /var/lib/jenkins/workspace/codeql/empty
+          sh 'codeql database create --language=java --overwrite /var/lib/jenkins/workspace/codeql/empty'
         }
       }
     }
