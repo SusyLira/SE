@@ -25,7 +25,7 @@ pipeline {
     stage('Run CodeQL Analysis') {
       steps {
         script {
-         sh 'codeql query run --database=my-database custom-security-query.ql --format=sarif-latest > codeql-results.sarif'
+         sh 'codeql query run --database=my-database custom-security-query.ql > codeql-results.sarif'
         }
       }
     }
