@@ -3,10 +3,16 @@ pipeline {
     environment {
         CODEQL_HOME = tool 'CodeQL'
         CODEQL_JAVA_LIB_PATH = "${CODEQL_HOME}/java/libs"
-        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/"  
+        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/" 
     }
 
     stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build CodeQL Database') {
             steps {
                 script {
@@ -14,6 +20,7 @@ pipeline {
                         codeql database create \
                         --language=java \
                         --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
+                        --source-root ./var/lib/jenkins/workspace/ \
                         --source-root /var/lib/jenkins/workspace/ \
                         ${CODEQL_DATABASE_PATH}
                     """
