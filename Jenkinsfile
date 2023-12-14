@@ -5,8 +5,6 @@ pipeline {
         CODEQL_HOME = tool 'CodeQL'
         CODEQL_JAVA_LIB_PATH = "${CODEQL_HOME}/java/libs"
         CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/"
-        MAVEN_HOME = tool 'Maven'
-        PATH = "$PATH:${MAVEN_HOME}/bin"
     }
 
 
