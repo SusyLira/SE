@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         CODEQL_HOME = tool 'CodeQL'
-        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/empty"
+        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/"
     }
 
     stages {
@@ -32,7 +32,7 @@ pipeline {
         stage('Run CodeQL Analysis') {
             steps {
                 script {
-                    // Run CodeQL analysis (replace 'query.ql' with your actual query file)
+                    // Run CodeQL analysis
                     sh """
                         ${CODEQL_HOME}/codeql query run \
                             --database=${CODEQL_DATABASE_PATH} \
