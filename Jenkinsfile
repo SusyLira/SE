@@ -7,7 +7,6 @@ pipeline {
     }
 
     stages {
-        
         stage('Build CodeQL Database') {
             steps {
                 script {
@@ -22,7 +21,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Run CodeQL Analysis') {
             steps {
                 script {
@@ -30,16 +29,16 @@ pipeline {
                 }
             }
         }
-        
-        post {
-            failure {
-                echo 'CodeQL analysis failed!'
-                // Additional failure handling if needed
-            }
-            success {
-                echo 'CodeQL analysis succeeded!'
-                // Additional success handling if needed
-            }
+    }
+
+    post {
+        failure {
+            echo 'CodeQL analysis failed!'
+            // Additional failure handling if needed
+        }
+        success {
+            echo 'CodeQL analysis succeeded!'
+            // Additional success handling if needed
         }
     }
 }
