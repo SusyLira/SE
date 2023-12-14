@@ -1,51 +1,41 @@
 pipeline {
     agent any
+    environment {
+        CODEQL_HOME = tool 'CodeQL'
+        CODEQL_JAVA_LIB_PATH = "${CODEQL_HOME}/java/libs"
+        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/"  
+    }
 
     stages {
-        stage('Checkout SCM') {
-            steps {
-                checkout scm
-            }
-        }
-
+        
         stage('Build CodeQL Database') {
             steps {
                 script {
-                    def codeqlCommand = "${tool 'CodeQL'}/codeql"
-
                     sh """
-                        ${codeqlCommand} database create \
+                        codeql database create \
                         --language=java \
-                        --command "${codeqlCommand} java autobuild" \
+                        --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
+                        --source-root ./var/lib/jenkins/workspace/ \
                         --source-root /var/lib/jenkins/workspace/ \
-                        --output /var/lib/jenkins/workspace/codeql/ \
-                        --overwrite
+                        ${CODEQL_DATABASE_PATH}
                     """
                 }
             }
         }
-
         stage('Run CodeQL Analysis') {
             steps {
                 script {
-                    def codeqlCommand = "${tool 'CodeQL'}/codeql"
-
-                    sh """
-                        ${codeqlCommand} query run \
-                        --database=/var/lib/jenkins/workspace/codeql/ \
-                        /var/lib/jenkins/workspace/codeql/query.ql
-                    """
+                    sh "codeql query run --database=${CODEQL_DATABASE_PATH} /var/lib/jenkins/workspace/codeql/query.ql"
                 }
             }
         }
     }
-
+}
     post {
         failure {
             echo 'CodeQL analysis failed!'
             // Additional failure handling if needed
         }
-
         success {
             echo 'CodeQL analysis succeeded!'
             // Additional success handling if needed
