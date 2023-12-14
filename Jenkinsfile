@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-   stages {
+       stages {
         stage('Build CodeQL Database') {
             steps {
                 script {
