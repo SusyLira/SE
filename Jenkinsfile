@@ -7,6 +7,12 @@ pipeline {
     }
 
     stages {
+        stage('Print CodeQL_HOME') {
+            steps {
+                echo "CODEQL_HOME: ${CODEQL_HOME}"
+                sh "ls -la ${CODEQL_HOME}"
+            }
+        }
         stage('Checkout SCM') {
             steps {
                 checkout scm
