@@ -22,6 +22,7 @@ pipeline {
                 }
             }
         }
+    }
         stage('Run CodeQL Analysis') {
             steps {
                 script {
