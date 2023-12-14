@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        codeql database create \
+                        ${CODEQL_HOME}/codeql database create \
                         --language=java \
                         --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
                         --source-root /var/lib/jenkins/workspace/ \
@@ -37,7 +37,7 @@ pipeline {
         stage('Run CodeQL Analysis') {
             steps {
                 script {
-                    sh "codeql query run --database=${CODEQL_DATABASE_PATH} /var/lib/jenkins/workspace/codeql/query.ql"
+                    sh "${CODEQL_HOME}/codeql query run --database=${CODEQL_DATABASE_PATH} /var/lib/jenkins/workspace/codeql/query.ql"
                 }
             }
         }
