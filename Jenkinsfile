@@ -7,6 +7,11 @@ pipeline {
     }
     
    stages {
+       stage('Checkout SCM') {
+            steps {
+                git 'https://github.com/SusyLira/SE.git'
+            }
+        }
        
         stage('Build CodeQL Database') {
             steps {
@@ -16,7 +21,6 @@ pipeline {
                         --language=java \
                         --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
                         --source-root ./var/lib/jenkins/workspace/ \
-                        --source-root /var/lib/jenkins/workspace/ \
                         ${CODEQL_DATABASE_PATH}
                     """
                 }
