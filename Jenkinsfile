@@ -7,7 +7,6 @@ pipeline {
     }
 
     stages {
-       stages {
         stage('Build CodeQL Database') {
             steps {
                 script {
@@ -15,13 +14,13 @@ pipeline {
                         codeql database create \
                         --language=java \
                         --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
-                        --source-root ./var/lib/jenkins/workspace/ \
                         --source-root /var/lib/jenkins/workspace/ \
                         ${CODEQL_DATABASE_PATH}
                     """
                 }
             }
         }
+
         stage('Run CodeQL Analysis') {
             steps {
                 script {
@@ -30,7 +29,6 @@ pipeline {
             }
         }
     }
-}
 
     post {
         failure {
