@@ -3,8 +3,12 @@ pipeline {
 
     environment {
         CODEQL_HOME = tool 'CodeQL'
-        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/"
+        CODEQL_JAVA_LIB_PATH = "${CODEQL_HOME}/java/libs"
+        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/"
+        MAVEN_HOME = tool 'Maven'
+        PATH = "$PATH:${MAVEN_HOME}/bin"
     }
+
 
     stages {
         stage('Checkout SCM') {
@@ -20,7 +24,7 @@ pipeline {
                     sh """
                         ${CODEQL_HOME}/codeql database create \
                             --language=java \
-                            --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
+                            --command "${MAVEN_HOME}/bin/mvn install" \
                             --source-root /var/lib/jenkins/workspace/ \
                             --overwrite \
                             ${CODEQL_DATABASE_PATH}
