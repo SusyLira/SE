@@ -28,7 +28,8 @@ pipeline {
                         --language=java \
                         --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
                         --source-root /var/lib/jenkins/workspace/ \
-                        ${CODEQL_DATABASE_PATH}
+                        --output ${CODEQL_DATABASE_PATH} \
+                        --overwrite
                     """
                 }
             }
