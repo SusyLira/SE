@@ -1,0 +1,56 @@
+name: codeqlpack
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        language: [java]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Build
+      run: |
+        /opt/hostedtoolcache/CodeQL/2.15.4/x64/codeql/codeql version --format=json
+  {
+    "productName" : "CodeQL",
+    "vendor" : "GitHub",
+    "version" : "2.15.4",
+    "sha" : "6994dfd6d94ee3d205768fbe15e18312bf22b388",
+    "branches" : [
+      "codeql-cli-2.15.4"
+    ],
+    "copyright" : "Copyright (C) 2019-2023 GitHub, Inc.",
+    "unpackedLocation" : "/opt/hostedtoolcache/CodeQL/2.15.4/x64/codeql",
+    "configFileLocation" : "/home/runner/.config/codeql/config",
+    "configFileFound" : false,
+    "features" : {
+      "analysisSummaryV2Option" : true,
+      "featuresInVersionResult" : true,
+      "indirectTracingSupportsStaticBinaries" : false,
+      "supportsPython312" : true,
+      "mrvaPackCreate" : true,
+      "threatModelOption" : true
+    }
+  }
+
+    - name: Analyze
+      run: |
+        codeql database create --language=java --source-root . --output=codeql-database
+        codeql query run --database=codeql-database query.ql
