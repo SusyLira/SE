@@ -1,12 +1,7 @@
 pipeline {
     agent any
-    environment {
-        CODEQL_HOME = tool 'CodeQL'
-        CODEQL_JAVA_LIB_PATH = "${CODEQL_HOME}/java/libs"
-        CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/" 
-    }
-    stages {
 
+    stages {
         stage('Checkout SCM') {
             steps {
                 checkout scm
@@ -16,12 +11,14 @@ pipeline {
         stage('Build CodeQL Database') {
             steps {
                 script {
+                    def codeqlCommand = "${tool 'CodeQL'}/codeql"
+
                     sh """
-                        ${CODEQL_HOME}/codeql database create \
+                        ${codeqlCommand} database create \
                         --language=java \
-                        --command "${CODEQL_HOME}/java/tools/autobuild.sh" \
+                        --command "${codeqlCommand} java autobuild" \
                         --source-root /var/lib/jenkins/workspace/ \
-                        --database ${CODEQL_DATABASE_PATH} \
+                        --output /var/lib/jenkins/workspace/codeql/ \
                         --overwrite
                     """
                 }
@@ -31,7 +28,13 @@ pipeline {
         stage('Run CodeQL Analysis') {
             steps {
                 script {
-                    sh "${CODEQL_HOME}/codeql query run --database=${CODEQL_DATABASE_PATH} /var/lib/jenkins/workspace/codeql/query.ql"
+                    def codeqlCommand = "${tool 'CodeQL'}/codeql"
+
+                    sh """
+                        ${codeqlCommand} query run \
+                        --database=/var/lib/jenkins/workspace/codeql/ \
+                        /var/lib/jenkins/workspace/codeql/query.ql
+                    """
                 }
             }
         }
