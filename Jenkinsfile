@@ -5,7 +5,7 @@ pipeline {
         CODEQL_JAVA_LIB_PATH = "${CODEQL_HOME}/java/libs"
         CODEQL_DATABASE_PATH = "/var/lib/jenkins/workspace/codeql/" 
     }
-
+    stages {
 
         stage('Checkout SCM') {
             steps {
